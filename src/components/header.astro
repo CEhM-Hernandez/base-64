@@ -1,3 +1,35 @@
-<header>
-  <h1>Header</h1>
+---
+import { CodeXml } from '@lucide/astro'
+import { languages, defaultLang, type Language } from '@/lang'
+import lang from '@/lang/es'
+import LangMenu from '@/components/lang-menu.astro'
+import ThemeButton from '@/components/theme-button.astro'
+
+interface Props {
+  currentLang?: Language
+}
+
+const { currentLang = defaultLang } = Astro.props
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <a
+      href={`${currentLang === defaultLang ? '/' : `/${currentLang}`}`}
+      class="flex items-center gap-3 transition-opacity hover:opacity-80"
+    >
+      <div class="flex p-2 items-center justify-center rounded-lg bg-foreground">
+        <CodeXml class="size-7 text-background" />
+      </div>
+      <div class="flex flex-col h-full justify-center">
+        <h1 class="text-lg font-semibold tracking-tight">{lang.title}</h1>
+        <p class="text-sm text-muted-foreground">{lang.description}</p>
+      </div>
+    </a>
+
+    <div class="relative flex items-center gap-4">
+      <LangMenu currentLang={currentLang} languages={languages} defaultLang={defaultLang} />
+      <ThemeButton client:load />
+    </div>
+  </div>
 </header>

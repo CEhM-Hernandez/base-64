@@ -1,8 +1,6 @@
 {
-  "trailingComma": "es5",
-  "plugins": [
-    "prettier-plugin-astro"
-  ],
+  "trailingComma": "none",
+  "plugins": ["prettier-plugin-astro"],
   "semi": false,
   "singleQuote": true,
   "printWidth": 100,

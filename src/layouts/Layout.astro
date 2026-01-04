@@ -2,20 +2,31 @@
 import '@/globals.css'
 import Header from '@/components/header.astro'
 import Footer from '@/components/footer.astro'
+import { defaultLang, useTranslations, type Language } from '@/lang'
+
+interface Props {
+  lang?: Language
+}
+
+const { lang = defaultLang } = Astro.props
+const t = useTranslations(lang)
 ---
 
 <!doctype html>
-<html lang="es-CO" class="dark">
+<html lang={lang} class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Base 64 Encoder | CEhM</title>
+    <meta name="description" content={t.description} />
+    <title>{t.title} | CEhM</title>
   </head>
-  <body class="h-dvh w-full bg-background text-foreground">
-    <Header />
-    <slot />
+  <body class="w-full bg-background text-foreground flex flex-col gap-10 min-h-dvh">
+    <Header currentLang={lang} />
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>

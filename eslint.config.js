@@ -11,8 +11,8 @@ export default defineConfig([
   {
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
-    },
+      globals: globals.browser
+    }
   },
   {
     files: ['**/*.astro'],
@@ -21,7 +21,10 @@ export default defineConfig([
       tseslint.configs.recommended,
       eslintPluginAstro.configs.recommended,
       eslintPluginPrettier,
-      prettierConfig,
+      prettierConfig
     ],
-  },
+    rules: {
+      'prettier/prettier': ['error', { trailingComma: 'none' }]
+    }
+  }
 ])

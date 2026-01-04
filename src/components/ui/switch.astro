@@ -1,0 +1,60 @@
+---
+import type { SwitchProps } from '@/types/components/switch'
+import { cn } from '@/utils/cn'
+import { cva } from 'class-variance-authority'
+
+type Props = SwitchProps
+
+const {
+  size = 'md',
+  variant = 'primary',
+  checked = false,
+  class: className,
+  id,
+  ...rest
+} = Astro.props
+
+const switchId = id || `switch-${Math.random().toString(36).slice(2, 9)}`
+
+const switchVariants = cva(
+  'relative rounded-full cursor-pointer inline-block has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background transition-all border',
+  {
+    variants: {
+      size: {
+        sm: 'w-8 h-4 [&>span]:size-3 has-[:checked]:[&>span]:translate-x-3.5',
+        md: 'w-10 h-5 [&>span]:size-4 has-[:checked]:[&>span]:translate-x-4.5',
+        lg: 'w-12 h-6 [&>span]:size-5 has-[:checked]:[&>span]:translate-x-5.5'
+      },
+      variant: {
+        primary:
+          'bg-input border-border has-[:checked]:bg-primary has-[:checked]:border-primary [&>span]:bg-foreground has-[:checked]:[&>span]:bg-primary-foreground',
+        secondary:
+          'bg-muted border-border has-[:checked]:bg-accent has-[:checked]:border-accent [&>span]:bg-muted-foreground has-[:checked]:[&>span]:bg-accent-foreground'
+      }
+    },
+    defaultVariants: {
+      size: 'md',
+      variant: 'primary'
+    }
+  }
+)
+
+const classes = cn(switchVariants({ size, variant, class: className }))
+---
+
+<label for={switchId} class={classes}>
+  <input
+    id={switchId}
+    name={switchId}
+    type="checkbox"
+    checked={checked ? true : undefined}
+    class="size-0 opacity-0"
+    {...rest}
+  />
+  <p class="sr-only">{checked ? 'On' : 'Off'}</p>
+  <span
+    class="absolute top-px left-0.5 rounded-full shadow-md transition-all duration-300 ease-in-out flex items-center justify-center [&_svg]:size-full"
+  >
+    <slot />
+  </span>
+</label>

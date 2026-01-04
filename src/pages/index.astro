@@ -1,7 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import { defaultLang, useTranslations } from '@/lang'
+
+const t = useTranslations(defaultLang)
 ---
 
-<Layout>
-  <main>content</main>
+<Layout lang={defaultLang}>
+  <main>content - {t.title}</main>
 </Layout>
