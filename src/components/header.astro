@@ -1,7 +1,7 @@
 ---
 import { CodeXml } from '@lucide/astro'
 import { languages, defaultLang, type Language } from '@/lang'
-import lang from '@/lang/es'
+import { useTranslations } from '@/lang'
 import LangMenu from '@/components/lang-menu.astro'
 import ThemeButton from '@/components/theme-button.astro'
 
@@ -10,6 +10,8 @@ interface Props {
 }
 
 const { currentLang = defaultLang } = Astro.props
+
+const lang = useTranslations(currentLang)
 ---
 
 <header class="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">

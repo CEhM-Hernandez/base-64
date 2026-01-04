@@ -1,8 +1,55 @@
 ---
 import Switch from '@/components/ui/switch.astro'
-import { Sun } from '@lucide/astro'
+import { Moon, Sun } from '@lucide/astro'
 ---
 
-<Switch variant="primary">
-  <Sun class="text-primary p-px has-checked:rotate-180" />
+<Switch variant="primary" id="theme-switch">
+  <span class="relative size-full">
+    <Sun
+      class="text-primary-foreground absolute inset-0 p-px transition-all duration-300 rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
+    />
+    <Moon
+      class="text-primary absolute inset-0 p-px transition-all duration-300 rotate-90 scale-0 dark:rotate-0 dark:scale-100"
+    />
+  </span>
 </Switch>
+
+<script>
+  function initTheme() {
+    const themeSwitch = document.getElementById('theme-switch') as HTMLInputElement
+    if (!themeSwitch) return
+
+    // Obtener el tema guardado o del sistema
+    const getTheme = () => {
+      const stored = localStorage.getItem('theme')
+      if (stored) return stored
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+
+    // Aplicar tema
+    const applyTheme = (theme: string) => {
+      document.documentElement.classList.toggle('dark', theme === 'dark')
+      localStorage.setItem('theme', theme)
+      themeSwitch.checked = theme === 'dark'
+    }
+
+    // Inicializar
+    applyTheme(getTheme())
+
+    // Escuchar cambios en el switch
+    themeSwitch.addEventListener('change', () => {
+      applyTheme(themeSwitch.checked ? 'dark' : 'light')
+    })
+
+    // Escuchar cambios del sistema
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light')
+      }
+    })
+  }
+
+  // Ejecutar en carga inicial y en navegación de Astro
+  initTheme()
+  document.addEventListener('astro:after-swap', initTheme)
+</script>

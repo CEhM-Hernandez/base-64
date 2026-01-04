@@ -19,7 +19,7 @@ const { currentLang, languages, defaultLang } = Astro.props
 <button
   id="lang-toggle"
   type="button"
-  class="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
+  class="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
   aria-label="Cambiar idioma"
   aria-expanded="false"
   aria-haspopup="true"
@@ -31,7 +31,7 @@ const { currentLang, languages, defaultLang } = Astro.props
 
 <div
   id="lang-menu"
-  class="absolute right-0 top-full mt-2 hidden min-w-35 overflow-hidden rounded-lg border border-border bg-card shadow-lg"
+  class="absolute right-0 top-full mt-2 hidden min-w-35 overflow-hidden rounded-md border border-border bg-card shadow-lg"
   role="menu"
 >
   {

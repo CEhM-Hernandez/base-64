@@ -22,7 +22,9 @@ const t = useTranslations(lang)
     <meta name="description" content={t.description} />
     <title>{t.title} | CEhM</title>
   </head>
-  <body class="w-full bg-background text-foreground flex flex-col gap-10 min-h-dvh">
+  <body
+    class="w-full bg-background text-foreground flex flex-col gap-10 min-h-dvh transition-colors duration-200"
+  >
     <Header currentLang={lang} />
     <main class="flex-1 max-w-5xl mx-auto w-full px-4">
       <slot />
