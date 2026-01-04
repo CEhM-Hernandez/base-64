@@ -1,15 +1,35 @@
 {
   "name": "base-64",
   "type": "module",
+  "packageManager": "pnpm@10.26.2",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
-    "astro": "^5.16.6"
+    "@lucide/astro": "^0.562.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "5.16.6",
+    "tailwindcss": "^4.1.18"
   },
-  "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6"
+  "devDependencies": {
+    "@eslint/js": "9.39.2",
+    "@typescript-eslint/eslint-plugin": "8.51.0",
+    "@typescript-eslint/parser": "8.51.0",
+    "eslint": "9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "1.5.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "17.0.0",
+    "prettier": "3.7.4",
+    "prettier-plugin-astro": "0.14.1",
+    "typescript-eslint": "^8.51.0"
+  }
 }
