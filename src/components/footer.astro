@@ -1,1 +1,76 @@
-<footer class="w-full self-end">Footer</footer>
+---
+import { useTranslations } from '@/lang'
+import type { Language } from '@/lang'
+import SocialItem from '@/components/social-item.astro'
+import { SOCIALS } from '@/lib/socials'
+
+const url = Astro.url
+const currentLang =
+  url.pathname.split('/')[1] === '' ? ('es' as Language) : (url.pathname.split('/')[1] as Language)
+const lang = useTranslations(currentLang)
+const year = new Date().getFullYear()
+---
+
+<footer
+  class="relative w-full border-t border-border/80 bg-linear-to-b from-card/80 via-background/90 to-background/95 backdrop-blur"
+>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.10),transparent_35%)]"
+  >
+  </div>
+
+  <div
+    class="relative mx-auto flex w-full justify-between items-center max-w-7xl gap-10 px-4 py-10"
+  >
+    <section class="space-y-4">
+      <div
+        class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold tracking-[0.08em] text-primary"
+      >
+        CEhM
+      </div>
+      <p class="text-lg font-semibold text-foreground">{lang.footer.tagline}</p>
+      <p class="max-w-xl text-sm leading-relaxed text-muted-foreground">{lang.footer.crafted}</p>
+      <div class="flex flex-wrap gap-3">
+        <a
+          class="inline-flex items-center gap-4 rounded-full border border-border bg-primary/10 px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/20"
+          href="https://cehm.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span
+            aria-hidden="true"
+            class="size-2 rounded-full bg-success shadow-[0_0_0_4px_rgba(59,130,246,0.15)] animate-pulse"
+          ></span>
+          {lang.footer.ctaPortfolio}
+        </a>
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-4">
+      <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+        Social
+      </h3>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {
+          SOCIALS.map((social) => (
+            <SocialItem
+              name={social.name as (typeof SOCIALS)[number]['name']}
+              icon={social.icon}
+              url={social.url}
+              textColor={social.textColor}
+              fillColor={social.fillColor}
+              bgColor={social.bgColor}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <section class="relative border-t border-border/60 bg-background/60 backdrop-blur-sm">
+    <p class="mx-auto max-w-7xl px-4 py-3 text-center text-xs text-muted-foreground">
+      {lang.footer.copy.replace('{year}', year.toString())}
+    </p>
+  </section>
+</footer>

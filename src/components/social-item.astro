@@ -1,0 +1,43 @@
+---
+import type { SocialIconName } from '@/types/components/social-icon'
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
+import type { HTMLAttributes } from 'astro/types'
+import LinkedIn from '@/components/icons/linkedIn.astro'
+import GitHub from '@/components/icons/github.astro'
+import WhatsApp from '@/components/icons/whatsapp.astro'
+import type { Social } from '@/lib/socials'
+import { Globe } from '@lucide/astro'
+
+type Props = HTMLAttributes<'a'> & Social
+
+const icons: Record<SocialIconName, AstroComponentFactory> = {
+  LinkedIn,
+  GitHub,
+  WhatsApp,
+  Globe
+}
+
+const { name: socialName, icon, url = '#', textColor, fillColor, bgColor, ...rest } = Astro.props
+
+const Icon = icons[icon]
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="flex items-center gap-2 text-muted-foreground transition-all hover:text-foreground hover:scale-105 group duration-400"
+  style={`--text-color: ${textColor}; --bg-color: ${bgColor}; --fill-color: ${fillColor}`}
+  {...rest}
+>
+  <span
+    class="size-8 flex items-center justify-center rounded-md border-2 border-border shadow-md transition-colors bg-accent group-hover:bg-(--bg-color) duration-400"
+  >
+    {
+      Icon && (
+        <Icon class="size-5 fill-accent-foreground transition-colors group-hover:fill-(--fill-color) group-hover:text-(--text-color) duration-400" />
+      )
+    }
+  </span>
+  <span>{socialName}</span>
+</a>
