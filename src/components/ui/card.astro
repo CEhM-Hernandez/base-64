@@ -1,0 +1,21 @@
+---
+import type { CardProps } from '@/types/components/card'
+import { cn } from '@/utils/cn'
+
+type Props = CardProps
+
+const { class: className, ...rest } = Astro.props
+---
+
+<div
+  class={cn(
+    'rounded-xl border border-border bg-card text-card-foreground shadow-lg p-6',
+    'flex flex-col overflow-hidden',
+    'transition-all duration-300 ease-out',
+    'backdrop-blur-sm',
+    className
+  )}
+  {...rest}
+>
+  <slot />
+</div>

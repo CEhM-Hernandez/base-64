@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import { languages, defaultLang, useTranslations, type Language } from '@/lang'
+import { languages, defaultLang, type Language } from '@/lang'
+import Main from '@/components/main/index.astro'
 
 export function getStaticPaths() {
   return Object.keys(languages)
@@ -9,9 +10,8 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params as { lang: Language }
-const t = useTranslations(lang)
 ---
 
 <Layout lang={lang}>
-  <main>content - {t.title}</main>
+  <Main />
 </Layout>

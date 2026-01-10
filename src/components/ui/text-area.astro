@@ -1,0 +1,28 @@
+---
+import type { TextAreaProps } from '@/types/components/text-area'
+import { cn } from '@/utils/cn'
+
+type Props = TextAreaProps
+
+const classNames = cn(
+  'border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 aria-invalid:border-destructive flex min-h-16 w-full rounded-lg border bg-transparent px-4 py-3 text-base shadow-sm transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:shadow-md focus-visible:border-ring hover:border-ring/60 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50 md:text-sm'
+)
+
+const { class: className, autoGrow = true, ...rest } = Astro.props
+---
+
+<textarea
+  data-slot="textarea"
+  class={cn(
+    classNames,
+    'read-only:bg-accent/50 read-only:border-accent',
+    // Custom scrollbar styles
+    'scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border hover:scrollbar-thumb-ring/60',
+    '[&::-webkit-scrollbar]:w-2',
+    '[&::-webkit-scrollbar-track]:bg-transparent',
+    '[&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb]:rounded-full',
+    '[&::-webkit-scrollbar-thumb]:hover:bg-ring/60',
+    autoGrow ? 'field-sizing-content resize-none overflow-hidden' : 'resize-y',
+    className
+  )}
+  {...rest}></textarea>
