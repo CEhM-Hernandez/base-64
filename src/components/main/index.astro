@@ -10,62 +10,79 @@ const url = Astro.url
 const currentLang =
   url.pathname.split('/')[1] === '' ? ('es' as Language) : (url.pathname.split('/')[1] as Language)
 const lang = useTranslations(currentLang)
+const t = lang.content
 ---
 
-<Card class="w-full h-fit grid grid-cols-1 sm:grid-cols-2 gap-x-4 items-start auto-rows-auto">
-  <div class="w-full items-center mb-2 text-sm font-medium col-span-full flex self-end">
-    <label for="from" class="w-full pl-8 font-bold">{lang.content.naturalLanguage}</label>
+<Card class="w-full h-fit gap-2">
+  <div class="w-full items-center text-sm font-medium col-span-full flex self-end">
+    <label for="from" class="w-full pl-8 font-bold">{t.naturalLanguage}</label>
     <Button
-      class="size-10 w-fit self-center"
+      class="size-8 w-fit self-center"
       size="icon"
       variant="secondary"
       id="swap"
-      title={lang.content.swap}
+      title={t.swap}
     >
       <ArrowLeftRight />
     </Button>
-    <label for="to" class="w-full pl-8 font-bold">{lang.content.base64}</label>
+    <label for="to" class="w-full pl-8 font-bold">{t.base64}</label>
   </div>
-  <section class="min-h-50 w-full h-full rounded-md flex flex-col gap-2 flex-1">
-    <Textarea class="min-h-50 h-full bg-secondary" name="decoded" id="from" />
-  </section>
-  <section class="min-h-50 w-full h-full rounded-md flex flex-col gap-2 flex-1 relative">
-    <Textarea class="min-h-50 h-full bg-secondary" name="encoded" id="to" readonly />
-    <span
-      class="absolute top-2 right-2 flex items-center justify-center rounded-md p-1.5 bg-accent hover:bg-accent/80 cursor-pointer transition-colors duration-200"
-      title="Copiar al portapapeles"
-      id="copy-to-clipboard"
-    >
-      <Copy class="size-5" />
-    </span>
-  </section>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start auto-rows-auto">
+    <section class="min-h-50 w-full h-full rounded-md flex flex-col gap-2 flex-1">
+      <Textarea class="min-h-50 h-full" name="decoded" id="from" placeholder={t.inputPlaceholder} />
+    </section>
+    <section class="min-h-50 w-full h-full rounded-md flex flex-col gap-2 flex-1 relative">
+      <Textarea
+        class="min-h-50 h-full pr-10"
+        name="encoded"
+        id="to"
+        placeholder={t.outputPlaceholder}
+        readonly
+      />
+      <Button
+        class="absolute top-2 right-2 size-8 z-10 pointer-events-auto hidden"
+        size="icon"
+        variant="secondary"
+        title={t.copyToClipboard}
+        id="copy-to-clipboard"
+      >
+        <Copy class="size-5" />
+      </Button>
+    </section>
+  </div>
 </Card>
 
 <script
   is:inline
-  define:vars={{ encodeError: lang.content.encodeError, decodeError: lang.content.decodeError }}
+  define:vars={{
+    encodeError: t.encodeError,
+    decodeError: t.decodeError,
+    successCopy: t.successCopy
+  }}
 >
-  window.__errors = { encodeError, decodeError }
+  window.__i18n = { encodeError, decodeError, successCopy }
 </script>
 
 <script>
   import { $ } from '@/utils/get-element'
   import { encodeBase64 } from '@/utils/base64-encode'
   import { decodeBase64 } from '@/utils/base64-decode'
+  import { copyToClipboard } from '@/utils/copy-to-clipboard'
 
   declare global {
     interface Window {
-      __errors: { encodeError: string; decodeError: string }
+      __i18n: { encodeError: string; decodeError: string; successCopy: string }
     }
   }
 
-  const { encodeError, decodeError } = window.__errors
+  const { encodeError, decodeError, successCopy } = window.__i18n
 
   const fromTextarea = $('#from') as HTMLTextAreaElement
   const fromLabel = $('label[for="from"]') as HTMLLabelElement
   const toLabel = $('label[for="to"]') as HTMLLabelElement
   const toTextarea = $('#to') as HTMLTextAreaElement
   const swapButton = $('#swap') as HTMLButtonElement
+  const copyButton = $('#copy-to-clipboard') as HTMLButtonElement
 
   const isDecoding = () => fromTextarea.name === 'decoded'
 
@@ -81,6 +98,12 @@ const lang = useTranslations(currentLang)
     toTextarea.value = isDecoding()
       ? encodeBase64(fromTextarea.value, encodeError)
       : decodeBase64(fromTextarea.value, decodeError)
+
+    if (toTextarea.value.trim() === '') {
+      copyButton.style.display = 'none'
+    } else {
+      copyButton.style.display = 'inline-flex'
+    }
   }
 
   const debouncedTransform = debounce(transform, 150)
@@ -92,4 +115,8 @@ const lang = useTranslations(currentLang)
   })
 
   fromTextarea.addEventListener('input', debouncedTransform)
+  copyButton.addEventListener(
+    'click',
+    async () => await copyToClipboard(toTextarea.value, successCopy)
+  )
 </script>

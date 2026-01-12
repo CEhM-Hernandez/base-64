@@ -1,0 +1,70 @@
+---
+import type { ToastProps } from '@/types/components/toast'
+import { cn } from '@/utils/cn'
+import { cva } from 'class-variance-authority'
+import { X, CircleCheck, CircleX, TriangleAlert, Info } from '@lucide/astro'
+
+type Props = ToastProps
+
+const { variant = 'info', class: className } = Astro.props
+
+const toastVariants = cva(
+  cn(
+    'fixed bottom-4 right-4 z-50',
+    'flex items-center gap-3',
+    'px-4 py-3 rounded-lg',
+    'text-sm font-medium',
+    'shadow-lg border',
+    'transform transition-all duration-300 ease-out',
+    'translate-y-full opacity-0'
+  ),
+  {
+    variants: {
+      variant: {
+        success: 'bg-success text-success-foreground border-success',
+        error: 'bg-destructive text-destructive-foreground border-destructive',
+        warning: 'bg-warning text-warning-foreground border-warning',
+        info: 'bg-primary text-primary-foreground border-primary'
+      }
+    },
+    defaultVariants: {
+      variant: 'info'
+    }
+  }
+)
+
+const classes = cn(toastVariants({ variant }), className)
+---
+
+<!-- Hidden icons template for JS to clone -->
+<template id="toast-icons">
+  <span data-icon="success"><CircleCheck size={20} /></span>
+  <span data-icon="error"><CircleX size={20} /></span>
+  <span data-icon="warning"><TriangleAlert size={20} /></span>
+  <span data-icon="info"><Info size={20} /></span>
+</template>
+
+<div id="toast-container" data-slot="toast" class={classes} role="alert" aria-live="polite">
+  <span id="toast-icon" class="shrink-0"></span>
+  <span id="toast-message" class="flex-1"></span>
+  <button
+    id="toast-close"
+    type="button"
+    class="shrink-0 p-1 rounded hover:bg-white/20 transition-colors cursor-pointer"
+    aria-label="Cerrar"
+  >
+    <X size={16} />
+  </button>
+</div>
+
+<script>
+  import { toast } from '@/utils/toast'
+
+  declare global {
+    interface Window {
+      toast: typeof toast
+    }
+  }
+
+  window.toast = toast
+</script>
