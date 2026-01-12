@@ -1,0 +1,21 @@
+---
+import Github from '@/components/icons/github.astro'
+import { useTranslations, type Language } from '@/lang'
+import Button from '@/components/ui/button.astro'
+
+const githubRepoUrl = 'https://github.com/CEhM-Hernandez/base-64'
+const url = Astro.url
+const currentLang =
+  url.pathname.split('/')[1] === '' ? ('es' as Language) : (url.pathname.split('/')[1] as Language)
+const lang = useTranslations(currentLang)
+---
+
+<Button
+  variant="secondary"
+  class="flex gap-2 bg-muted px-3 rounded-md border border-border items-center"
+>
+  <a href={githubRepoUrl} target="_blank" rel="noopener noreferrer" class="flex gap-2 items-center">
+    <Github class="size-5 fill-primary-foreground" />
+    <span class="text-sm font-medium text-foreground">{lang.header.githubRepo}</span>
+  </a>
+</Button>

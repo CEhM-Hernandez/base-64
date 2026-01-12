@@ -4,6 +4,7 @@ import { languages, defaultLang, type Language } from '@/lang'
 import { useTranslations } from '@/lang'
 import LangMenu from '@/components/lang-menu.astro'
 import ThemeButton from '@/components/theme-button.astro'
+import GithubRepo from '@/components/github-repo.astro'
 
 interface Props {
   currentLang?: Language
@@ -30,6 +31,7 @@ const lang = useTranslations(currentLang)
     </a>
 
     <div class="relative flex items-center gap-4">
+      <GithubRepo />
       <LangMenu currentLang={currentLang} languages={languages} defaultLang={defaultLang} />
       <ThemeButton />
     </div>
