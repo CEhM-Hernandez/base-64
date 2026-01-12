@@ -15,7 +15,9 @@ const t = lang.content
 
 <Card class="w-full h-fit gap-2">
   <div class="w-full items-center text-sm font-medium flex">
-    <label for="from" class="w-full pl-8 font-bold">{t.naturalLanguage}</label>
+    <label for="from" class="w-full text-center px-2 font-bold text-pretty"
+      >{t.naturalLanguage}</label
+    >
     <Button
       class="size-8 w-fit self-center"
       size="icon"
@@ -25,7 +27,9 @@ const t = lang.content
     >
       <ArrowLeftRight />
     </Button>
-    <label for="to" class="w-full pl-8 font-bold">{t.base64}</label>
+    <label for="to" class="w-full text-center px-2 font-bold text-pretty">
+      {t.base64}
+    </label>
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start auto-rows-auto">
     <section class="min-h-50 w-full h-full rounded-md flex flex-col gap-2 flex-1">
