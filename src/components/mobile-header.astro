@@ -1,0 +1,94 @@
+---
+import { languages, defaultLang, type Language, useTranslations } from '@/lang'
+import { Menu, X } from '@lucide/astro'
+import GithubRepo from '@/components/github-repo.astro'
+import LangMenu from '@/components/lang-menu.astro'
+import ThemeButton from '@/components/theme-button.astro'
+import Button from '@/components/ui/button.astro'
+
+interface Props {
+  currentLang?: Language
+}
+
+const { currentLang = defaultLang } = Astro.props
+const lang = useTranslations(currentLang)
+const t = lang.header
+---
+
+<div class="md:hidden" data-mobile-menu>
+  <Button
+    size="icon"
+    variant="ghost"
+    class="relative z-50 group"
+    title={t.openMenu}
+    data-menu-btn
+    data-open-text={t.openMenu}
+    data-close-text={t.closeMenu}
+    aria-expanded="false"
+  >
+    <Menu
+      class="size-5 transition-all duration-300 group-data-open:opacity-0 group-data-open:scale-75 group-data-open:rotate-90"
+    />
+    <X
+      class="size-5 absolute transition-all duration-300 opacity-0 scale-75 group-data-open:opacity-100 group-data-open:scale-100"
+    />
+  </Button>
+
+  <!-- Backdrop -->
+  <div
+    data-backdrop
+    class="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity duration-300 opacity-0 pointer-events-none data-open:opacity-100 data-open:pointer-events-auto w-full h-dvh"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Mobile Navigation -->
+  <nav
+    data-nav
+    class="fixed top-14 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-b border-border shadow-lg transition-all duration-300 ease-out -translate-y-full opacity-0 data-open:translate-y-0 data-open:opacity-100 min-h-[40vh] overflow-y-auto overflow-x-hidden flex flex-col gap-4 p-4 py-12"
+    aria-label="Mobile navigation"
+  >
+    <GithubRepo />
+    <LangMenu
+      currentLang={currentLang}
+      languages={languages}
+      defaultLang={defaultLang}
+      class:list="w-full"
+    />
+    <ThemeButton />
+  </nav>
+</div>
+
+<script>
+  function initMobileMenu() {
+    const container = document.querySelector('[data-mobile-menu]')
+    if (!container) return
+
+    const btn = container.querySelector('[data-menu-btn]')
+    const nav = container.querySelector('[data-nav]')
+    const backdrop = container.querySelector('[data-backdrop]')
+
+    if (!btn || !nav || !backdrop) return
+
+    const openText = btn.getAttribute('data-open-text') ?? ''
+    const closeText = btn.getAttribute('data-close-text') ?? ''
+
+    const toggle = (open?: boolean) => {
+      const isOpen = open ?? !btn.hasAttribute('data-open')
+
+      const action = isOpen ? 'setAttribute' : 'removeAttribute'
+      ;[btn, nav, backdrop].forEach((el) => el[action]('data-open', ''))
+
+      btn.setAttribute('aria-expanded', String(isOpen))
+      btn.setAttribute('title', isOpen ? closeText : openText)
+      document.body.style.overflow = isOpen ? 'hidden' : ''
+    }
+
+    btn.addEventListener('click', () => toggle())
+    backdrop.addEventListener('click', () => toggle(false))
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && toggle(false))
+    window.addEventListener('resize', () => window.innerWidth >= 768 && toggle(false))
+  }
+
+  initMobileMenu()
+</script>

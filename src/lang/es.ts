@@ -2,7 +2,9 @@ export default {
   title: 'Codificador y Decodificador Base64',
   description: 'Una herramienta sencilla para codificar y decodificar cadenas en Base64 en línea.',
   header: {
-    githubRepo: 'Repositorio en GitHub'
+    githubRepo: 'Repositorio en GitHub',
+    openMenu: 'Abrir menú de navegación',
+    closeMenu: 'Cerrar menú de navegación'
   },
   content: {
     swap: 'Intercambiar lenguajes',

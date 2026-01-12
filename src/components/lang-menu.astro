@@ -1,4 +1,5 @@
 ---
+import { cn } from '@/utils/cn'
 import { Globe, ChevronDown } from '@lucide/astro'
 
 interface Props {
@@ -11,59 +12,72 @@ interface Props {
     }
   >
   defaultLang: string
+  class?: string
 }
 
-const { currentLang, languages, defaultLang } = Astro.props
+const { currentLang, languages, defaultLang, class: className, ...rest } = Astro.props
 ---
 
-<button
-  id="lang-toggle"
-  type="button"
-  class="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
-  aria-label="Cambiar idioma"
-  aria-expanded="false"
-  aria-haspopup="true"
->
-  <Globe class="size-4" />
-  <span>{languages[currentLang].flag}</span>
-  <ChevronDown class="size-3 opacity-60" />
-</button>
+<div class={cn('relative', className)} {...rest} data-lang-menu>
+  <button
+    type="button"
+    class="w-full flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
+    aria-label="Cambiar idioma"
+    aria-expanded="false"
+    aria-haspopup="true"
+    data-lang-toggle
+  >
+    <Globe class="size-4" />
+    <span>{languages[currentLang].flag}</span>
+    <ChevronDown class="size-3 opacity-60" />
+  </button>
 
-<div
-  id="lang-menu"
-  class="absolute right-0 top-full mt-2 hidden min-w-35 overflow-hidden rounded-md border border-border bg-card shadow-lg"
-  role="menu"
->
-  {
-    Object.entries(languages).map(([code, { label, flag }]) => (
-      <a
-        href={code === defaultLang ? '/' : `/${code}/`}
-        class:list={[
-          'flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-accent',
-          { 'bg-accent/50': code === currentLang }
-        ]}
-        role="menuitem"
-      >
-        <span class="text-base">{flag}</span>
-        <span>{label}</span>
-      </a>
-    ))
-  }
+  <div
+    class="absolute right-0 top-full mt-2 hidden min-w-35 overflow-hidden rounded-md border border-border bg-card shadow-lg z-50"
+    role="menu"
+    data-lang-dropdown
+  >
+    {
+      Object.entries(languages).map(([code, { label, flag }]) => (
+        <a
+          href={code === defaultLang ? '/' : `/${code}/`}
+          class:list={[
+            'flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-accent',
+            { 'bg-accent/50': code === currentLang }
+          ]}
+          role="menuitem"
+        >
+          <span class="text-base">{flag}</span>
+          <span>{label}</span>
+        </a>
+      ))
+    }
+  </div>
 </div>
 
 <script>
-  const toggle = document.getElementById('lang-toggle')
-  const menu = document.getElementById('lang-menu')
+  function initLangMenu() {
+    document.querySelectorAll<HTMLElement>('[data-lang-menu]').forEach((container) => {
+      const toggle = container.querySelector<HTMLButtonElement>('[data-lang-toggle]')
+      const dropdown = container.querySelector<HTMLElement>('[data-lang-dropdown]')
 
-  toggle?.addEventListener('click', () => {
-    const isOpen = menu?.classList.toggle('hidden') === false
-    toggle.setAttribute('aria-expanded', String(isOpen))
-  })
+      if (!toggle || !dropdown) return
 
-  document.addEventListener('click', (e) => {
-    if (!toggle?.contains(e.target as Node) && !menu?.contains(e.target as Node)) {
-      menu?.classList.add('hidden')
-      toggle?.setAttribute('aria-expanded', 'false')
-    }
-  })
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const isOpen = dropdown.classList.toggle('hidden') === false
+        toggle.setAttribute('aria-expanded', String(isOpen))
+      })
+
+      document.addEventListener('click', (e) => {
+        if (!container.contains(e.target as Node)) {
+          dropdown.classList.add('hidden')
+          toggle.setAttribute('aria-expanded', 'false')
+        }
+      })
+    })
+  }
+
+  initLangMenu()
+  document.addEventListener('astro:after-swap', initLangMenu)
 </script>

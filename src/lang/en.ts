@@ -4,7 +4,9 @@ export default {
   title: 'Base64 Encoder & Decoder',
   description: 'A simple tool to encode and decode Base64 strings online.',
   header: {
-    githubRepo: 'GitHub Repository'
+    githubRepo: 'GitHub Repository',
+    openMenu: 'Open navigation menu',
+    closeMenu: 'Close navigation menu'
   },
   content: {
     swap: 'Swap languages',

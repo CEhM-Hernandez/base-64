@@ -21,19 +21,19 @@ const year = new Date().getFullYear()
   </div>
 
   <div
-    class="relative mx-auto flex w-full justify-between items-center max-w-7xl gap-10 px-4 py-10"
+    class="relative mx-auto flex flex-col md:flex-row w-full justify-between items-center md:items-start max-w-7xl gap-8 md:gap-10 px-4 py-8 md:py-10"
   >
-    <section class="space-y-4">
+    <section class="space-y-4 text-center md:text-left">
       <div
         class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold tracking-[0.08em] text-primary"
       >
         CEhM
       </div>
-      <p class="text-lg font-semibold text-foreground">{lang.footer.tagline}</p>
+      <p class="text-base sm:text-lg font-semibold text-foreground">{lang.footer.tagline}</p>
       <p class="max-w-xl text-sm leading-relaxed text-muted-foreground">{lang.footer.crafted}</p>
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-wrap gap-3 justify-center md:justify-start">
         <a
-          class="inline-flex items-center gap-4 rounded-full border border-border bg-primary/10 px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/20"
+          class="inline-flex items-center gap-3 sm:gap-4 rounded-full border border-border bg-primary/10 px-3 sm:px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/20"
           href="https://cehm.dev"
           target="_blank"
           rel="noopener noreferrer"
@@ -47,11 +47,11 @@ const year = new Date().getFullYear()
       </div>
     </section>
 
-    <section class="flex flex-col gap-4">
+    <section class="flex flex-col gap-4 items-center md:items-start">
       <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-muted-foreground">
         Social
       </h3>
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {
           SOCIALS.map((social) => (
             <SocialItem
